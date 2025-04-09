@@ -14,11 +14,15 @@ const Login = () => {
           <p className='font-quick text-[1.2rem] font-medium text-gray-500'>Pick up from where you left off</p>
         </div>
         <div>
-          <div className=''>
+          <div>
+            <h2 className='font-league text-lg'>Email</h2>
             <CustomInput placeholder='Email' className='mb-6' />
-            <CustomInput placeholder='Password' className='mb-4' />
           </div>
-          <CustomButton className='mb-4'>Login</CustomButton>
+          <div>
+            <h2 className='font-league text-lg'>Password</h2>
+            <CustomInput placeholder='Password' className='mb-6' />
+          </div>
+          <CustomButton className='mb-4' to={'/home'}>Login</CustomButton>
           <div className='mb-4'>
             <p className='font-quick text-sm text-stone-500 text-center pb-2'>Or Login with Google</p>
             <GoogleLogin width={'400%'} onSuccess={(credentialReponse: CredentialResponse)=>{console.log(jwtDecode(credentialReponse.credential!))}} />
