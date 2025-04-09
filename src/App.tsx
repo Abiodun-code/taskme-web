@@ -3,7 +3,6 @@ import AuthLayout from './pages/not-authentication/AuthLayout'
 import Login from './pages/not-authentication/Login'
 import Register from './pages/not-authentication/Register'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import path from 'path'
 import Home from './pages/authentication/Home'
 import BodyLayout from './pages/authentication/BodyLayout'
 
