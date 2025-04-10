@@ -3,7 +3,7 @@ import authImage from "../../assets/task-bg.png";
 import logo from "../../assets/task-blue.png";
 const AuthLayout = () => {
   return (
-    <main className="lg:grid grid-cols-2 w-full h-[100svh] p-[1.2rem] bg-white">
+    <main className="lg:grid grid-cols-2 w-full h-[100svh] p-[1.2rem] bg-white overflow-hidden">
       <div className="w-full h-full flex flex-col">
         <figure className="w-full lg:px-[2.4rem]">
           <Link to="/">

@@ -5,6 +5,8 @@ import Register from './pages/not-authentication/Register'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import Home from './pages/authentication/Home'
 import BodyLayout from './pages/authentication/BodyLayout'
+import { Provider } from 'react-redux'
+import { store } from './services/store/Store'
 
 const App = () => {
 
@@ -33,9 +35,11 @@ const App = () => {
   const ClientKey = import.meta.env.VITE_CLIENT_ID
 
   return (
-    <GoogleOAuthProvider clientId={ClientKey}>
-      <RouterProvider router={route} />
-    </GoogleOAuthProvider>
+    <Provider store={store}>
+      <GoogleOAuthProvider clientId={ClientKey}>
+        <RouterProvider router={route} />
+      </GoogleOAuthProvider>
+    </Provider>
   )
 }
 
