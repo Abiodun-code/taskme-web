@@ -7,12 +7,14 @@ import Home from './pages/authentication/Home'
 import BodyLayout from './pages/authentication/BodyLayout'
 import { Provider } from 'react-redux'
 import { store } from './services/store/Store'
+import PhoneInputs from './pages/not-authentication/PhoneInputs'
 
 const App = () => {
 
   const authRoute = [
     { path: '/', element: <Login /> },
     { path: '/register', element: <Register /> },
+    {path: '/phone', element: <PhoneInputs />},
   ]
 
   const taskRoute = [

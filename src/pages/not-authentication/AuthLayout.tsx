@@ -4,7 +4,7 @@ import logo from "../../assets/task-blue.png";
 const AuthLayout = () => {
   return (
     <main className="lg:grid grid-cols-2 w-full h-[100svh] p-[1.2rem] bg-white overflow-hidden">
-      <div className="w-full h-full flex flex-col">
+      <div className="w-full h-full flex flex-col overflow-y-auto">
         <figure className="w-full lg:px-[2.4rem]">
           <Link to="/">
             <img
@@ -17,7 +17,7 @@ const AuthLayout = () => {
         <Outlet />
       </div>
       <figure className="w-full h-full hidden lg:block rounded-[1.2rem] overflow-hidden">
-        <img src={authImage} alt="" className="w-full h-full  object-cover" />
+        <img src={authImage} alt="" className="w-full h-full object-cover" />
       </figure>
     </main>
   );
