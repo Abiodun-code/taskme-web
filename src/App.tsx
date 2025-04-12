@@ -8,6 +8,7 @@ import BodyLayout from './pages/authentication/BodyLayout'
 import { Provider } from 'react-redux'
 import { store } from './services/store/Store'
 import PhoneInputs from './pages/not-authentication/PhoneInputs'
+import OtpInputs from './pages/not-authentication/OtpInputs'
 
 const App = () => {
 
@@ -15,6 +16,7 @@ const App = () => {
     { path: '/', element: <Login /> },
     { path: '/register', element: <Register /> },
     {path: '/phone', element: <PhoneInputs />},
+    {path:"/otp", element: <OtpInputs/>}
   ]
 
   const taskRoute = [

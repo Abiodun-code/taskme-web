@@ -18,7 +18,7 @@ const PhoneInputs = () => {
             country={'us'}
             value={''}
           />
-          <CustomButton className='mt-4'>Send otp</CustomButton>
+          <CustomButton className='mt-4' to={'/otp'}>Send otp</CustomButton>
         </div>
       </div>
     </div>
