@@ -1,6 +1,6 @@
 import CustomInput from '../../shared/Input'
 import CustomButton from '../../shared/Button'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
 import { useDispatch } from 'react-redux'
@@ -17,11 +17,13 @@ const Register = () => {
 
   const dispatch = useDispatch()
 
+  const navigation = useNavigate()
+
   // const {error, isLoading} = useSelector<RootState>((state) => state.register)
 
   const handleRegister = () => {
     dispatch(registerUser({firstName, lastName,email, password,}))
-    console.log(firstName, lastName, email, password)
+    navigation('/phone')
   }
 
   return (
@@ -48,7 +50,7 @@ const Register = () => {
             <h2 className='font-league text-lg'>Password</h2>
             <CustomInput placeholder='Password' className='mb-6' value={password} onChange={(e)=>setPassword(e.target.value)}/>
           </div>
-          <CustomButton className='mb-3' to={'/phone'}>Register</CustomButton>
+          <CustomButton className='mb-3' onClick={handleRegister}>Register</CustomButton>
           <div className='mb-4'>
             <p className='font-quick text-sm text-stone-500 text-center pb-2'>Or Register with Google</p>
             <GoogleLogin width={'400%'} onSuccess={(credentialReponse: CredentialResponse) => { console.log(jwtDecode(credentialReponse.credential!)) }} />

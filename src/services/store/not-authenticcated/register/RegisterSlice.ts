@@ -23,6 +23,7 @@ export const registerSlice = createSlice({
         state.isLoading = false
         state.error = true
       })
+
   },
 })
 
