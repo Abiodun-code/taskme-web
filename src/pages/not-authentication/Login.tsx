@@ -6,16 +6,26 @@ import { jwtDecode } from 'jwt-decode'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../../services/store/not-authenticcated/login/LoginThunk'
 import React from 'react'
+import { AppDispatch } from '../../services/store/Store'
 
 const Login = () => {
 
   const [email, setEmail] = React.useState<string>('')
     const [password, setPassword] = React.useState<string>('')
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
-  const handleLogin = () => {
-    dispatch(loginUser({email, password}))
+  // const navigation = useNavigate()
+
+  const handleLogin = async () => {
+    const resultAction = await dispatch(loginUser({ email, password }))
+
+    if (loginUser.fulfilled.match(resultAction)) {
+      alert(resultAction.payload) // or use toast
+      // navigation('/') // only navigate if registration is successful
+    } else {
+      alert(resultAction.payload || 'Registration failed')
+    }
   }
   
   return (

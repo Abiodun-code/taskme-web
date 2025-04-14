@@ -8,9 +8,10 @@ interface LinkButtonProps {
   children: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLAnchorElement> | undefined;
   state?: unknown;
+  disable?: boolean;
 }
 
-const CustomButton: React.FC<LinkButtonProps> = ({ to, className = '', children, onClick, state, ...props }) => {
+const CustomButton: React.FC<LinkButtonProps> = ({ disable, to, className = '', children, onClick, state, ...props }) => {
 
 
   return (
@@ -20,6 +21,7 @@ const CustomButton: React.FC<LinkButtonProps> = ({ to, className = '', children,
       {...props}
       onClick={onClick}
       state={state}
+      aria-disabled={disable}
     >
       {children}
     </Link>

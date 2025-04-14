@@ -5,12 +5,28 @@ import Register from './pages/not-authentication/Register'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import Home from './pages/authentication/Home'
 import BodyLayout from './pages/authentication/BodyLayout'
-import { Provider } from 'react-redux'
-import { store } from './services/store/Store'
+import { useSelector } from 'react-redux'
+import { RootState } from './services/store/Store'
 import PhoneInputs from './pages/not-authentication/PhoneInputs'
 import OtpInputs from './pages/not-authentication/OtpInputs'
+import { useEffect, useState } from 'react'
 
 const App = () => {
+
+  const loginToken = useSelector<RootState, string | null>((state) => state.login.accessToken);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem("accessToken"));
+
+  useEffect(() => {
+    if (loginToken) {
+      localStorage.setItem("accessToken", loginToken);
+      setIsAuthenticated(true);
+    } else {
+      const token = localStorage.getItem("accessToken");
+      setIsAuthenticated(!!token);
+    }
+  }, [loginToken]);
+
+  if (isAuthenticated === null) return null; // Prevent rendering before auth status is determined
 
   const authRoute = [
     { path: '/', element: <Login /> },
@@ -24,26 +40,25 @@ const App = () => {
   ]
   
   const route = createBrowserRouter([
-    {
-      path: '/',
-      element: <AuthLayout/>,
-      children: authRoute,
-    },
-    {
-      path: '/home',
-      element: <BodyLayout/>,
-      children: taskRoute,
-    }
+    isAuthenticated
+      ? {
+        path: '/',
+        element: <BodyLayout />,
+        children: taskRoute,
+      }
+      : {
+        path: '/',
+        element: <AuthLayout />,
+        children: authRoute,
+      },
   ])
 
   const ClientKey = import.meta.env.VITE_CLIENT_ID
 
   return (
-    <Provider store={store}>
-      <GoogleOAuthProvider clientId={ClientKey}>
-        <RouterProvider router={route} />
-      </GoogleOAuthProvider>
-    </Provider>
+    <GoogleOAuthProvider clientId={ClientKey}>
+      <RouterProvider router={route} />
+    </GoogleOAuthProvider>
   )
 }
 
