@@ -36,7 +36,7 @@ const App = () => {
   ]
 
   const taskRoute = [
-    {path: '/home', element: <Home />},
+    {path: '/', element: <Home />},
   ]
   
   const route = createBrowserRouter([
