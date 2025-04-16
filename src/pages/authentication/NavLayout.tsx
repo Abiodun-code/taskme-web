@@ -1,4 +1,3 @@
-import React from 'react'
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { useLocation } from 'react-router-dom';
 import { getPageTitle } from '../../utils/GetPageTitle';

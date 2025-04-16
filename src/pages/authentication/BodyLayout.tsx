@@ -9,7 +9,7 @@ const BodyLayout = () => {
         <SideLayout/>
       </div>
       <div className='w-[83vw]'>
-        <div className='py-1 px-5 border-b w-full shadow-sm'>
+        <div className='py-1 px-5 border-b bg-neutral-100 w-full shadow-sm'>
           <NavLayout/>
         </div>
         <Outlet />

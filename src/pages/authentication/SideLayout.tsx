@@ -19,7 +19,7 @@ const SideLayout = () => {
         <MobileSideLayout/>
       }
 
-      <div className='border-r shadow-md lg:w-[20vw] xl:w-[20vw] h-screen hidden lg:block xl:block'>
+      <div className='border-r border-r-neutral-300 bg-neutral-100 shadow-md lg:w-[20vw] xl:w-[20vw] h-screen hidden lg:block xl:block'>
         <figure className="w-full">
           <Link to="/">
             <img
