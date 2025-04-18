@@ -1,8 +1,10 @@
 import { TopTitle } from "../../utils/TopTittle"
 import { useState } from "react"
 import type {Task, Column} from "../../types"
-import ColumnDivide from "../../components/ui/Column"
+import ColumnDivide from "../../components/home/Column"
 import { DndContext, DragEndEvent } from "@dnd-kit/core"
+import { FaPlus } from "react-icons/fa";
+import AddTask from "../../components/home/AddTask"
 
 const COLUMNS:Column[] = [
   { id: "TODO", title: "To Do" },
@@ -54,6 +56,8 @@ const Home = () => {
 
   const[tasks, setTasks] = useState<Task[]>(INITIAL_TASKS)
 
+  const [openModal, setOpenModal] = useState(false)
+
   const handleDragEnd = (event:DragEndEvent)=>{
     const {active, over} = event
 
@@ -71,17 +75,33 @@ const Home = () => {
 
   return (
     <div className="p-4">
-      <div className="flex gap-8 w-full items-start">
-        <DndContext onDragEnd={handleDragEnd}>
-          {COLUMNS.map((column)=>(
-          <ColumnDivide 
-          key={column.id} 
-          column={column} 
-          tasks={tasks.filter((task) => task.status === column.id)}
-        />
-        ))}
-        </DndContext>
-      </div>
+      {tasks.length > 0 ?
+        (<div className="flex flex-wrap gap-6 w-full lg:items-start xl:justify-start lg:justify-start items-center justify-center xl:items-start">
+          <DndContext onDragEnd={handleDragEnd}>
+            {COLUMNS.map((column) => (
+              <ColumnDivide
+                key={column.id}
+                column={column}
+                tasks={tasks.filter((task) => task.status === column.id)}
+              />
+            ))}
+          </DndContext>
+        </div>
+        ) : (
+          <div className="flex items-center justify-center w-full">
+            <h1 className="font-inter font-semibold text-2xl">No tasks available</h1>
+          </div>
+        )}
+      {/* Floating Add Button */}
+      <button
+        onClick={() => setOpenModal(true)}
+        className="fixed bottom-6 right-6 z-50 bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:bg-blue-700 transition-colors text-3xl"
+      >
+        <FaPlus size={'1.3rem'}/>
+      </button>
+
+      {/* Modal */}
+        <AddTask isOpen={openModal} onClose={()=>setOpenModal(false)}/>
     </div>
   )
 }

@@ -18,7 +18,7 @@ const ColumnDivide = ({ column, tasks }: ColumnProp) => {
       <div className="flex items-center justify-between pb-2 border-b-2 border-b-neutral-200 p-4">
         <div className="flex items-center gap-2">
           <h2 className="font-inter font-semibold text-black">{column.title}</h2>
-          <p className="">{tasks.length}</p>
+          <p className="font-inter font-semibold text-blue-900">{tasks.length}</p>
         </div>
         <div
           className="cursor-pointer transition-transform"

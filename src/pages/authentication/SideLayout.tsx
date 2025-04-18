@@ -1,25 +1,14 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from "../../assets/task-blue.png";
 import { truncateText } from '../../utils/TruncateText';
 import { LuLogOut } from 'react-icons/lu';
-import { FaBarsStaggered } from "react-icons/fa6";
-import MobileSideLayout from '../../components/ui/MobileSideLayout';
 
 const SideLayout = () => {
 
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div className='w-full h-full'>
-      <Link to={''} className='p-3 lg:hidden xl:hidden flex items-center bg-red-500 w-12 h-12 rounded-full' onClick={() => setIsOpen(!isOpen)}>
-        <FaBarsStaggered className='text-white' size={'2rem'} />
-      </Link>
-      {isOpen &&
-        <MobileSideLayout/>
-      }
+      <div className='fixed top-0 left-0 z-30 border-r border-r-neutral-300 bg-neutral-100 shadow-md w-[20vw] h-screen hidden lg:block xl:block'>
 
-      <div className='border-r border-r-neutral-300 bg-neutral-100 shadow-md lg:w-[20vw] xl:w-[20vw] h-screen hidden lg:block xl:block'>
         <figure className="w-full">
           <Link to="/">
             <img

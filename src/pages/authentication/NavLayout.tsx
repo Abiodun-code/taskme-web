@@ -8,7 +8,7 @@ const NavLayout = () => {
   
   return (
     <div className='flex justify-between items-center'>
-      <h1 className='font-quick text-[1rem] font-medium leading-[3rem]'>{getPageTitle(location.pathname)}</h1>
+      <h1 className='font-inter text-[1rem] font-medium leading-[3rem]'>{getPageTitle(location.pathname)}</h1>
       <div className='w-8 h-8 border rounded-full flex items-center border-gray-400 justify-center cursor-pointer'>
         <IoMdNotificationsOutline size={'1.3rem'}/>
       </div>
