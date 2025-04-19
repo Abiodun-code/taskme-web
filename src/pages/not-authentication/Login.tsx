@@ -1,32 +1,45 @@
 import CustomInput from '../../shared/Input'
 import CustomButton from '../../shared/Button'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../../services/store/not-authenticcated/login/LoginThunk'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AppDispatch } from '../../services/store/Store'
+import { TopTitle } from '../../utils/TopTittle'
+import { useAuth } from '../../hooks/useAuth'
 
 const Login = () => {
+
+  TopTitle('Login - TaskMe')
 
   const [email, setEmail] = React.useState<string>('')
     const [password, setPassword] = React.useState<string>('')
 
   const dispatch = useDispatch<AppDispatch>()
 
-  // const navigation = useNavigate()
+  const navigation = useNavigate()
+  
+  const { isAuthenticated } = useAuth(); // get auth status
 
   const handleLogin = async () => {
-    const resultAction = await dispatch(loginUser({ email, password }))
+    const resultAction = await dispatch(loginUser({ email, password }));
 
     if (loginUser.fulfilled.match(resultAction)) {
-      alert(resultAction.payload) // or use toast
-      // navigation('/') // only navigate if registration is successful
+      alert(resultAction.payload); // or toast
+      // ❌ REMOVE navigation here
     } else {
-      alert(resultAction.payload || 'Registration failed')
+      alert(resultAction.payload || 'Login failed');
     }
-  }
+  };
+
+  // ✅ useEffect to navigate after authentication
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigation('/home');
+    }
+  }, [isAuthenticated, navigation]);
   
   return (
     <div className='flex items-center xl:w-[90%] lg:w-[90%] xl:mx-auto lg:mx-auto justify-start my-auto'>

@@ -1,45 +1,33 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import AuthLayout from './pages/not-authentication/AuthLayout'
-import Login from './pages/not-authentication/Login'
-import Register from './pages/not-authentication/Register'
-import { GoogleOAuthProvider } from '@react-oauth/google'
-import Home from './pages/authentication/Home'
-import BodyLayout from './pages/authentication/BodyLayout'
-import { useSelector } from 'react-redux'
-import { RootState } from './services/store/Store'
-import PhoneInputs from './pages/not-authentication/PhoneInputs'
-import OtpInputs from './pages/not-authentication/OtpInputs'
-import { useEffect, useState } from 'react'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useMemo } from 'react';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+import AuthLayout from './pages/not-authentication/AuthLayout';
+import Login from './pages/not-authentication/Login';
+import Register from './pages/not-authentication/Register';
+import PhoneInputs from './pages/not-authentication/PhoneInputs';
+import OtpInputs from './pages/not-authentication/OtpInputs';
+
+import BodyLayout from './pages/authentication/BodyLayout';
+import Home from './pages/authentication/Home';
+
+import { useAuth } from './hooks/useAuth'; // <--- Use the new hook
 
 const App = () => {
-
-  const loginToken = useSelector<RootState, string | null>((state) => state.login.accessToken);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!localStorage.getItem("accessToken"));
-
-  useEffect(() => {
-    if (loginToken) {
-      localStorage.setItem("accessToken", loginToken);
-      setIsAuthenticated(true);
-    } else {
-      const token = localStorage.getItem("accessToken");
-      setIsAuthenticated(!!token);
-    }
-  }, [loginToken]);
-
-  if (isAuthenticated === null) return null; // Prevent rendering before auth status is determined
+  const { isAuthenticated } = useAuth();
 
   const authRoute = [
     { path: '/', element: <Login /> },
     { path: '/register', element: <Register /> },
-    {path: '/phone', element: <PhoneInputs />},
-    {path:"/otp", element: <OtpInputs/>}
-  ]
+    { path: '/phone', element: <PhoneInputs /> },
+    { path: '/otp', element: <OtpInputs /> },
+  ];
 
   const taskRoute = [
-    {path: '/', element: <Home />},
-  ]
-  
-  const route = createBrowserRouter([
+    { path: '/home', element: <Home /> },
+  ];
+
+  const router = useMemo(() => createBrowserRouter([
     isAuthenticated
       ? {
         path: '/',
@@ -50,16 +38,17 @@ const App = () => {
         path: '/',
         element: <AuthLayout />,
         children: authRoute,
-      },
-  ])
+      }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ]), [isAuthenticated]);
 
-  const ClientKey = import.meta.env.VITE_CLIENT_ID
+  const ClientKey = import.meta.env.VITE_CLIENT_ID;
 
   return (
     <GoogleOAuthProvider clientId={ClientKey}>
-      <RouterProvider router={route} />
+      <RouterProvider router={router} />
     </GoogleOAuthProvider>
-  )
-}
+  );
+};
 
-export default App
+export default App;

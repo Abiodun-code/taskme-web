@@ -7,8 +7,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { registerUser } from '../../services/store/not-authenticcated/register/RegisterThunk'
 import React from 'react'
 import { AppDispatch, RootState } from '../../services/store/Store'
+import { TopTitle } from '../../utils/TopTittle'
 
 const Register = () => {
+
+  TopTitle('Register - TaskMe')
+
   const [firstName, setFirstName] = React.useState<string>('')
   const [lastName, setLastName] = React.useState<string>('')
   const [email, setEmail] = React.useState<string>('')

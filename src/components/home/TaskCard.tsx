@@ -1,6 +1,5 @@
 import { useDraggable } from "@dnd-kit/core"
 import { Task } from "../../types"
-import { Link } from "react-router-dom"
 
 type TaskCardProps = {
   task:Task
@@ -15,14 +14,14 @@ const TaskCard = ({task}:TaskCardProps) => {
     transform: `translate(${transform.x}px, ${transform.y}px)`,
   } : undefined
   return (
-    <Link 
+    <div 
       ref={setNodeRef} 
       {...listeners} 
       {...attributes} 
       className="cursor-grab rounded-lg bg-neutral-300 p-4 shadow-sm hover:shadow-md" style={style}>
       <h3 className="font-semibold font-inter text-black">{task.title}</h3>
       <p className="mt-2 text-base text-black font-league font-light">{task.description}</p>
-    </Link>
+    </div>
   )
 }
 

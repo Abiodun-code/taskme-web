@@ -1,9 +1,21 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import logo from "../../assets/task-blue.png";
 import { truncateText } from '../../utils/TruncateText';
 import { LuLogOut } from 'react-icons/lu';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../../services/store/not-authenticcated/login/LoginThunk';
+import { AppDispatch } from '../../services/store/Store';
+import { useEffect } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 
 const SideLayout = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const navigation = useNavigate()
+  const { isAuthenticated } = useAuth(); // get auth status
+
+  const handleLogout = ()=>{
+    dispatch(logoutUser())
+  }
 
   return (
     <div className='w-full h-full'>
@@ -20,15 +32,15 @@ const SideLayout = () => {
         </figure>
         <div className=' absolute bottom-5 w-full flex items-center px-[1rem]'>
           <div className='flex items-center space-x-2'>
-            <div className='border p-4 rounded-full'></div>
+            <div className='border border-black p-4 rounded-full'></div>
             <div className='flex-row items-center'>
               <h1 className='font-inter text-xs font-semibold'>User name</h1>
               <p className='font-league font-light text-sm'>{truncateText('username@gmail.com', 15)}</p>
             </div>
           </div>
-          <Link to={''} className='flex items-center justify-center bg-red-500 w-8 h-8 rounded-full ml-9 mr-auto'>
+          <div onClick={handleLogout} className='flex items-center justify-center bg-red-500 w-8 h-8 rounded-full ml-auto'>
             <LuLogOut className='text-white' size={16} />
-          </Link>
+          </div>
         </div>
       </div>
     </div>

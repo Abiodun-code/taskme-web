@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { signInWithEmailAndPassword, reload } from "firebase/auth";
 import { auth, db } from "../../../firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { setAuth } from "./LoginSlice";
+import { clearAuth, setAuth } from "./LoginSlice";
 
 export const loginUser = createAsyncThunk(
   "auth/signIn",
@@ -58,3 +58,13 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
+
+export const logoutUser = createAsyncThunk("auth/logout", async (_, { dispatch }) => {
+  try {
+    await auth.signOut();
+    localStorage.removeItem("accessToken");
+    dispatch(clearAuth());
+  } catch (error) {
+    console.error("Error logging out:", error);
+  }
+});

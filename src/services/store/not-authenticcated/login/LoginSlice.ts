@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { loginUser } from "./LoginThunk"
+import { loginUser, logoutUser } from "./LoginThunk"
 
 const initialState = {
   isLoading: false,
@@ -30,6 +30,16 @@ export const loginSlice = createSlice({
     .addCase(loginUser.rejected, (state)=>{
       state.isLoading = false
       state.error = true
+    })
+    .addCase(logoutUser.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(logoutUser.fulfilled, (state) => {
+      state.isLoading = false;
+    })
+    .addCase(logoutUser.rejected, (state) => {
+      state.isLoading = false;
+      state.error = true;
     })
   },
 })
