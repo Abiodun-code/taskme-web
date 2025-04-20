@@ -7,6 +7,7 @@ import { logoutUser } from '../../services/store/not-authenticcated/login/LoginT
 import { AppDispatch } from '../../services/store/Store';
 import { toast } from 'react-toastify';
 import useCurrentUser from '../../hooks/useCurrentUser';
+import Spinner from '../../components/ui/Spinner';
 
 const SideLayout = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -22,7 +23,9 @@ const SideLayout = () => {
   const { user, isLoading, error } = useCurrentUser();
 
   if (isLoading) {
-    return <div className='flex items-center justify-center'>Loading user data...</div>;
+    return <div className='absolute top-0 bottom-0 right-0 bg-black bg-opacity-25 flex justify-center items-center left-0'>
+      <Spinner className='border-r-orange-400 border-l-blue-600 w-14 h-14'/>
+    </div>;
   }
 
   if (error) {
@@ -48,8 +51,8 @@ const SideLayout = () => {
           <div className='flex items-center space-x-2'>
             <div className='border border-black p-4 rounded-full'></div>
             <div className='flex-row items-center'>
-              <h1 className='font-inter text-xs font-semibold'>User name</h1>
-              <p className='font-league font-light text-sm'>{truncateText('username@gmail.com', 15)}</p>
+              <h1 className='font-inter text-xs font-semibold'>{user?.lastName || ""}{" "}{user?.firstName}</h1>
+              <p className="font-league font-light text-sm">{truncateText(user?.email || "", 15)}</p>
             </div>
           </div>
           <div onClick={handleLogout} className='flex items-center justify-center bg-red-500 w-8 h-8 rounded-full ml-auto'>

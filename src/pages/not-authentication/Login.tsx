@@ -94,7 +94,7 @@ const Login = () => {
 
           <CustomButton className="mb-4" onClick={handleLogin} disable={isLoading}>
             {isLoading ? (
-              <Spinner/>
+              <Spinner className='border-r-orange-400 border-l-blue-600' />
             ) : (
               'Login'
             )}

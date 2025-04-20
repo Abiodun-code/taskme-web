@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { auth, db } from "../../../firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 const initialState = {
   user: null, // Stores the global user data
@@ -13,24 +14,43 @@ export const fetchCurrentUser = createAsyncThunk(
   "user/fetchCurrentUser",
   async (_, { rejectWithValue }) => {
     try {
-      const currentUser = auth.currentUser;
-      if (!currentUser) {
-        throw new Error("No user logged in");
+      if (auth.currentUser) {
+        const userRef = doc(db, "users", auth.currentUser.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (!userSnap.exists()) {
+          throw new Error("User data not found in Firestore");
+        }
+        return { uid: auth.currentUser.uid, ...userSnap.data() };
       }
 
-      const userRef = doc(db, "users", currentUser.uid);
-      const userSnap = await getDoc(userRef);
+      // If currentUser is null, wait for onAuthStateChanged
+      const userPromise = new Promise((resolve, reject) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+          unsubscribe();
+          if (user) {
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
 
-      if (!userSnap.exists()) {
-        throw new Error("User data not found in Firestore");
-      }
+            if (!userSnap.exists()) {
+              reject(new Error("User data not found in Firestore"));
+            } else {
+              resolve({ uid: user.uid, ...userSnap.data() });
+            }
+          } else {
+            reject(new Error("No user logged in"));
+          }
+        });
+      });
 
-      return { uid: currentUser.uid, ...userSnap.data() };
-    } catch (error:unknown | undefined) {
+      const userData = await userPromise;
+      return userData;
+    } catch (error: any) {
       return rejectWithValue(error.message || "Failed to fetch user");
     }
   }
 );
+
 
 // Create async thunk for updating user in AsyncStorage
 export const updateUserInAsyncStorage = createAsyncThunk(
