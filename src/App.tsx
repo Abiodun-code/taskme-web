@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { useMemo } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -11,42 +11,49 @@ import OtpInputs from './pages/not-authentication/OtpInputs';
 import BodyLayout from './pages/authentication/BodyLayout';
 import Home from './pages/authentication/Home';
 
-import { useAuth } from './hooks/useAuth'; // <--- Use the new hook
+import { useAuth } from './hooks/useAuth';
+import { Slide, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const { isAuthenticated } = useAuth();
-
-  const authRoute = [
-    { path: '/', element: <Login /> },
-    { path: '/register', element: <Register /> },
-    { path: '/phone', element: <PhoneInputs /> },
-    { path: '/otp', element: <OtpInputs /> },
-  ];
-
-  const taskRoute = [
-    { path: '/home', element: <Home /> },
-  ];
+  const ClientKey = import.meta.env.VITE_CLIENT_ID;
 
   const router = useMemo(() => createBrowserRouter([
-    isAuthenticated
-      ? {
-        path: '/',
-        element: <BodyLayout />,
-        children: taskRoute,
-      }
-      : {
-        path: '/',
-        element: <AuthLayout />,
-        children: authRoute,
-      }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    {
+      path: '/',
+      element: isAuthenticated ? <BodyLayout /> : <AuthLayout />,
+      children: isAuthenticated
+        ? [
+          { index: true, element: <Navigate to="home" replace /> },  // 👈 redirect "/" to "home"
+          { path: 'home', element: <Home /> },
+        ]
+        : [
+          { index: true, element: <Login /> },
+          { path: 'register', element: <Register /> },
+          { path: 'phone', element: <PhoneInputs /> },
+          { path: 'otp', element: <OtpInputs /> },
+        ],
+    },
+    { path: '*', element: <Navigate to="/" replace /> }, // 👈 catch unknown paths
   ]), [isAuthenticated]);
-
-  const ClientKey = import.meta.env.VITE_CLIENT_ID;
 
   return (
     <GoogleOAuthProvider clientId={ClientKey}>
       <RouterProvider router={router} />
+      <ToastContainer
+        position='top-center'
+        transition={Slide}
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        toastStyle={{ fontSize: 16, fontFamily: 'inherit' }}
+      />
     </GoogleOAuthProvider>
   );
 };

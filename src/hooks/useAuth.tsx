@@ -10,8 +10,8 @@ export const useAuth = () => {
       localStorage.setItem("accessToken", loginToken);
       setIsAuthenticated(true);
     } else {
-      // const tokenInStorage = ;
-      setIsAuthenticated(!!localStorage.getItem("accessToken"));
+      localStorage.getItem("accessToken");
+      setIsAuthenticated(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginToken]);

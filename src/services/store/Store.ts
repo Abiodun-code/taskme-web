@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { registerReducer } from './not-authenticcated/register/RegisterSlice'
 import { loginReducer } from './not-authenticcated/login/LoginSlice'
+import { updateUserReducer } from './authenticated/update-user/UpdateSlice'
 // ...
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     // Example: user: userReducer,
     register: registerReducer,
     login: loginReducer,
+    updateUser: updateUserReducer
   },
 })
 

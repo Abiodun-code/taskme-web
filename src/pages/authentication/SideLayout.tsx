@@ -5,17 +5,31 @@ import { LuLogOut } from 'react-icons/lu';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../../services/store/not-authenticcated/login/LoginThunk';
 import { AppDispatch } from '../../services/store/Store';
-import { useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { toast } from 'react-toastify';
+import useCurrentUser from '../../hooks/useCurrentUser';
 
 const SideLayout = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const navigation = useNavigate()
-  const { isAuthenticated } = useAuth(); // get auth status
+  const navigate = useNavigate()
 
   const handleLogout = ()=>{
     dispatch(logoutUser())
+    toast.success("Logged out successfully")
+    navigate('/')
+
   }
+
+  const { user, isLoading, error } = useCurrentUser();
+
+  if (isLoading) {
+    return <div className='flex items-center justify-center'>Loading user data...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  console.log(user); // Log here after user data is fetched
 
   return (
     <div className='w-full h-full'>
