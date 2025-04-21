@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { auth, db } from "../../../firebase";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { User } from "../../../../types";
 
@@ -17,7 +17,7 @@ const initialState:UserState = {
 };
 
 // Create async thunk for fetching current user from backend API using Axios
-export const fetchCurrentUser = createAsyncThunk<User, void, {rejectValue: string}>(
+export const fetchCurrentUser = createAsyncThunk<User, void, { rejectValue: string }>(
   "user/fetchCurrentUser",
   async (_, { rejectWithValue }) => {
     try {
@@ -29,11 +29,12 @@ export const fetchCurrentUser = createAsyncThunk<User, void, {rejectValue: strin
         if (!userSnap.exists()) {
           throw new Error("User data not found in Firestore");
         }
-        return { uid: currentUser.uid, ...userSnap.data() };
+        return { uid: currentUser.uid, ...userSnap.data() } as User;
       }
 
       // If currentUser is null, wait for onAuthStateChanged
-      const userPromise = new Promise((resolve, reject) => {
+      // eslint-disable-next-line no-async-promise-executor
+      const userPromise = new Promise<User>(async (resolve, reject) => { // 👈 add <User> here
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
           unsubscribe();
           if (user) {
@@ -43,7 +44,7 @@ export const fetchCurrentUser = createAsyncThunk<User, void, {rejectValue: strin
             if (!userSnap.exists()) {
               reject(new Error("User data not found in Firestore"));
             } else {
-              resolve({ uid: user.uid, ...userSnap.data() });
+              resolve({ uid: user.uid, ...userSnap.data() } as User);
             }
           } else {
             reject(new Error("No user logged in"));
@@ -54,27 +55,7 @@ export const fetchCurrentUser = createAsyncThunk<User, void, {rejectValue: strin
       const userData = await userPromise;
       return userData;
     } catch (error) {
-      return rejectWithValue(error?.message || "Failed to fetch user data");
-    }
-  }
-);
-
-// Create async thunk for updating user in AsyncStorage
-export const updateUserInAsyncStorage = createAsyncThunk<User, Partial<User>, { rejectValue: string }>(
-  "user/updateInAsyncStorage",
-  async (updatedUser, { rejectWithValue }) => {
-    try {
-      const currentUser = auth.currentUser;
-      if (!currentUser) {
-        return rejectWithValue("No user logged in");
-      }
-
-      const userRef = doc(db, "users", currentUser.uid);
-      await updateDoc(userRef, updatedUser);
-
-      return { uid: currentUser.uid, ...updatedUser } as User;
-    } catch (error) {
-      return rejectWithValue(error?.message || "Failed to update user");
+      return rejectWithValue((error as Error).message || "Failed to fetch user data");
     }
   }
 );
@@ -95,10 +76,6 @@ const userSlice = createSlice({
     builder.addCase(fetchCurrentUser.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload || "Failed to fetch user data";
-    });
-
-    builder.addCase(updateUserInAsyncStorage.fulfilled, (state, action) => {
-      state.user = action.payload;
     });
   },
 });

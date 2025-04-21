@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import Spinner from '../../components/ui/Spinner';
 import { useState } from 'react';
-import UserModal from '../../components/UserModal';
+import UserModal from '../../components/home/UserModal';
 
 const SideLayout = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -62,7 +62,7 @@ const SideLayout = () => {
                 </p>
               )}
             </div>
-            <UserModal isOpen={openModal} onClose={() => setOpenModal(false)} />
+            <UserModal isOpen={openModal} onClose={()=>setOpenModal(false)} />
             <div className='flex-row items-center'>
               <h1 className='font-inter text-xs font-semibold'>{user?.lastName || ""} {user?.firstName}</h1>
               <p className="font-league font-light text-sm">{truncateText(user?.email || "", 15)}</p>

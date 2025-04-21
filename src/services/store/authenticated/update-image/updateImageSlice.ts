@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { auth, db } from "../../../firebase";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { User } from "../../../../types";
 
 interface UserState {
@@ -27,9 +27,10 @@ export const uploadUserProfileImage = createAsyncThunk<User, Partial<User>, { re
       const userRef = doc(db, "users", currentUser.uid);
       await updateDoc(userRef, updatedUser);
 
-      return { uid: currentUser.uid, ...updatedUser } as User;
+      const updatedSnap = await getDoc(userRef);
+      return { uid: currentUser.uid, ...updatedSnap.data() } as User;
     } catch (error) {
-      return rejectWithValue(error?.message || "Failed to update user profile");
+      return rejectWithValue((error as Error).message || "Failed to update user profile");
     }
   }
 );
