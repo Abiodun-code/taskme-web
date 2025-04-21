@@ -10,3 +10,12 @@ export type Task = {
   description: string,
   status: string,
 }
+
+export interface User {
+  uid: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  profileImage?: string;
+  // add any other fields you have in Firestore
+}

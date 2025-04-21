@@ -8,10 +8,14 @@ import { AppDispatch } from '../../services/store/Store';
 import { toast } from 'react-toastify';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import Spinner from '../../components/ui/Spinner';
+import { useState } from 'react';
+import UserModal from '../../components/UserModal';
 
 const SideLayout = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
+
+  const [openModal, setOpenModal] = useState(false)
 
   const handleLogout = ()=>{
     dispatch(logoutUser())
@@ -49,9 +53,18 @@ const SideLayout = () => {
         </figure>
         <div className=' absolute bottom-5 w-full flex items-center px-[1rem]'>
           <div className='flex items-center space-x-2'>
-            <div className='border border-black p-4 rounded-full'></div>
+            <div className={`border ${user?.profileImage ? 'border-none' : "border-neutral-700"} w-9 h-9 flex justify-center items-center rounded-full`} onClick={()=>setOpenModal(true)}>
+              {user?.profileImage ? (
+                <img src={user.profileImage} alt="Profile" className="w-full h-full object-cover rounded-full" />
+              ) : (
+                <p className="font-medium text-2xl font-inter capitalize text-center">
+                  {user?.firstName?.charAt(0) || ""}
+                </p>
+              )}
+            </div>
+            <UserModal isOpen={openModal} onClose={() => setOpenModal(false)} />
             <div className='flex-row items-center'>
-              <h1 className='font-inter text-xs font-semibold'>{user?.lastName || ""}{" "}{user?.firstName}</h1>
+              <h1 className='font-inter text-xs font-semibold'>{user?.lastName || ""} {user?.firstName}</h1>
               <p className="font-league font-light text-sm">{truncateText(user?.email || "", 15)}</p>
             </div>
           </div>

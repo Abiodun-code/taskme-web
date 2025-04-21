@@ -42,17 +42,17 @@ const App = () => {
     <GoogleOAuthProvider clientId={ClientKey}>
       <RouterProvider router={router} />
       <ToastContainer
-        position='top-center'
+        position='top-right'
         transition={Slide}
-        autoClose={1000}
+        autoClose={1500}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop={true}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        toastStyle={{ fontSize: 16, fontFamily: 'inherit' }}
+        toastStyle={{ fontSize: ".9rem", fontFamily: 'Quicksand' }}
       />
     </GoogleOAuthProvider>
   );
