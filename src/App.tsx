@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import AuthLayout from './pages/not-authentication/AuthLayout';
@@ -14,10 +14,21 @@ import Home from './pages/authentication/Home';
 import { useAuth } from './hooks/useAuth';
 import { Slide, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from './services/store/Store';
+import { setAuth } from './services/store/not-authenticcated/login/LoginSlice';
 
 const App = () => {
   const { isAuthenticated } = useAuth();
+  const dispatch = useDispatch<AppDispatch>();
   const ClientKey = import.meta.env.VITE_CLIENT_ID;
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      dispatch(setAuth({ accessToken: token }));
+    }
+  }, [dispatch]);
 
   const router = useMemo(() => createBrowserRouter([
     {

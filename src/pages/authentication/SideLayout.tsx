@@ -21,7 +21,6 @@ const SideLayout = () => {
     dispatch(logoutUser())
     toast.success("Logged out successfully")
     navigate('/')
-
   }
 
   const { user, isLoading, error } = useCurrentUser();
@@ -40,7 +39,7 @@ const SideLayout = () => {
 
   return (
     <div className='w-full h-full'>
-      <div className='fixed top-0 left-0 z-30 border-r border-r-neutral-300 bg-neutral-100 shadow-md w-[20vw] h-screen hidden lg:block xl:block'>
+      <div className='fixed top-0 left-0 z-auto border-r border-r-neutral-300 bg-neutral-100 shadow-md w-[20vw] h-screen hidden lg:block xl:block'>
 
         <figure className="w-full">
           <Link to="/">
