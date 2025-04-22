@@ -3,6 +3,7 @@ import { registerReducer } from './not-authenticcated/register/RegisterSlice'
 import { loginReducer } from './not-authenticcated/login/LoginSlice'
 import { updateUserReducer } from './authenticated/update-user/UpdateSlice'
 import { updateImageReducer } from './authenticated/update-image/updateImageSlice'
+import { updateTaskReducer } from './authenticated/create-task/CreateTaskSlice'
 // ...
 
 export const store = configureStore({
@@ -12,7 +13,8 @@ export const store = configureStore({
     register: registerReducer,
     login: loginReducer,
     updateUser: updateUserReducer,
-    updateImage: updateImageReducer
+    updateImage: updateImageReducer,
+    updateTask: updateTaskReducer
   },
 })
 

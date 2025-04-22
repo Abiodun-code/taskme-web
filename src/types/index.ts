@@ -4,12 +4,12 @@ export interface Column {
   title: string,
 }
 
-export type Task = {
-  id: string,
-  title: string,
-  description: string,
-  status: string,
-}
+// export type Task = {
+//   id: string,
+//   title: string,
+//   description: string,
+//   status: string,
+// }
 
 export interface User {
   uid: string;
@@ -18,4 +18,12 @@ export interface User {
   lastName?: string;
   profileImage?: string;
   // add any other fields you have in Firestore
+}
+
+export type Task = {
+  id: string;
+  title: string;
+  description: string;
+  status: "TODO" | "IN_PROGRESS" | "DONE";
+  userId: string;
 }

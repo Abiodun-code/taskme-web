@@ -1,16 +1,40 @@
 import React, { useState } from 'react'
 import StepModal from '../../shared/StepModal'
 import CustomInput from '../../shared/Input'
-
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../services/store/Store';
+import { toast } from 'react-toastify';
+import { addTask } from '../../services/store/authenticated/create-task/CreateTaskSlice';
 const AddTask = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  const dispatch = useDispatch<AppDispatch>()
+
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleFinish = () => {
-    console.log('Task Added:', { title, description })
-    onClose()
-    setTitle('')
-    setDescription('')
+  const handleFinish = async () => {
+    if (!title.trim()) {
+      toast.error("Title is required")
+      return;
+    }
+
+    setLoading(true)
+    try {
+      await dispatch(addTask({
+        title,
+        description,
+        status: "TODO", // Always add new task to TODO column
+      })).unwrap()
+
+      toast.success("Task added successfully!")
+      onClose()
+      setTitle('')
+      setDescription('')
+    } catch (error) {
+      toast.error(error as string || "Failed to add task")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const StepOne = (
@@ -20,6 +44,7 @@ const AddTask = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Task Title"
+        disabled={loading}
       />
       <textarea
         value={description}
@@ -27,6 +52,7 @@ const AddTask = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         placeholder="Task Description"
         className="p-2 font-league text-lg font-light border border-gray-300 rounded-md w-full mt-2"
         rows={4}
+        disabled={loading}
       />
     </div>
   )

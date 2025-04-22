@@ -7,7 +7,6 @@ import { logoutUser } from '../../services/store/not-authenticcated/login/LoginT
 import { AppDispatch } from '../../services/store/Store';
 import { toast } from 'react-toastify';
 import useCurrentUser from '../../hooks/useCurrentUser';
-import Spinner from '../../components/ui/Spinner';
 import { useState } from 'react';
 import UserModal from '../../components/home/UserModal';
 
@@ -23,19 +22,11 @@ const SideLayout = () => {
     navigate('/')
   }
 
-  const { user, isLoading, error } = useCurrentUser();
-
-  if (isLoading) {
-    return <div className='absolute top-0 bottom-0 right-0 bg-black bg-opacity-25 flex justify-center items-center left-0'>
-      <Spinner className='border-r-orange-400 border-l-blue-600 w-14 h-14'/>
-    </div>;
-  }
+  const { user, error } = useCurrentUser();
 
   if (error) {
     return <div>Error: {error}</div>;
   }
-
-  console.log(user); // Log here after user data is fetched
 
   return (
     <div className='w-full h-full'>
