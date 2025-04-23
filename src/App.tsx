@@ -5,9 +5,6 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import AuthLayout from './pages/not-authentication/AuthLayout';
 import Login from './pages/not-authentication/Login';
 import Register from './pages/not-authentication/Register';
-import PhoneInputs from './pages/not-authentication/PhoneInputs';
-import OtpInputs from './pages/not-authentication/OtpInputs';
-
 import BodyLayout from './pages/authentication/BodyLayout';
 import Home from './pages/authentication/Home';
 
@@ -42,8 +39,6 @@ const App = () => {
         : [
           { index: true, element: <Login /> },
           { path: 'register', element: <Register /> },
-          { path: 'phone', element: <PhoneInputs /> },
-          { path: 'otp', element: <OtpInputs /> },
         ],
     },
     { path: '*', element: <Navigate to="/" replace /> }, // 👈 catch unknown paths

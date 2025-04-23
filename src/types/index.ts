@@ -4,13 +4,6 @@ export interface Column {
   title: string,
 }
 
-// export type Task = {
-//   id: string,
-//   title: string,
-//   description: string,
-//   status: string,
-// }
-
 export interface User {
   uid: string;
   email?: string;

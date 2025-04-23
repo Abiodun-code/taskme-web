@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth, RecaptchaVerifier } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import {getFirestore} from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -25,10 +25,3 @@ const db = getFirestore(app);
 // const provider = new GoogleAuthProvider();
 
 export { auth, db };
-
-declare global {
-  interface Window {
-    recaptchaVerifier?: RecaptchaVerifier;
-    confirmationResult?: any;
-  }
-}
