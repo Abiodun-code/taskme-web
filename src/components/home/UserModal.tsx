@@ -11,7 +11,7 @@ import Spinner from "../ui/Spinner";
 import { fetchCurrentUser } from "../../services/store/authenticated/update-user/UpdateSlice";
 
 const UserModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-  const { user, isLoading } = useCurrentUser();
+  const { user } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
 
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -65,14 +65,6 @@ const UserModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
     reader.readAsDataURL(selectedImage);
   };
 
-  if (isLoading) {
-    return (
-      <div className="absolute top-0 z-30 bottom-0 right-0 bg-black bg-opacity-25 flex justify-center items-center left-0">
-        <Spinner className="border-r-orange-400 border-l-blue-600 w-14 h-14" />
-      </div>
-    );
-  }
-
   return (
     <CustomModal isOpen={isOpen} onClose={onClose}>
       <div>
@@ -111,7 +103,7 @@ const UserModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
 
           {/* User Name & Email */}
           <h1 className="font-inter text-2xl font-semibold">
-            {user?.lastName || ""} {user?.firstName}
+            {user?.firstName || ""} {user?.lastName}
           </h1>
           <p className="font-league font-light text-lg">{user?.email || ""}</p>
         </div>

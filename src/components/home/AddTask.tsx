@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../services/store/Store';
 import { toast } from 'react-toastify';
 import { addTask } from '../../services/store/authenticated/create-task/CreateTaskSlice';
+import { addNotification } from '../../services/store/authenticated/notification/notification-slice';
 const AddTask = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const dispatch = useDispatch<AppDispatch>()
 
@@ -18,6 +19,11 @@ const AddTask = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
       return;
     }
 
+    if (!description.trim()) {
+      toast.error("Description is required")
+      return;
+    }
+
     setLoading(true)
     try {
       await dispatch(addTask({
@@ -25,6 +31,14 @@ const AddTask = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
         description,
         status: "TODO", // Always add new task to TODO column
       })).unwrap()
+
+      // ✅ Add a notification when task is successfully added
+      dispatch(addNotification({
+        id: Date.now(),
+        message: `"${title}" added successfully!`,
+        timestamp: new Date().toISOString(),
+        type: 'success',
+      }));
 
       toast.success("Task added successfully!")
       onClose()

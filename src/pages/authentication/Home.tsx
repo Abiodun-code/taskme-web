@@ -66,7 +66,7 @@ const Home = () => {
             console.error("Error deleting task:", error);
             toast.error("Failed to delete task");
           }
-        }, 2000);
+        }, 60000);
       }
     } catch (error) {
       console.error("Error updating task:", error)
