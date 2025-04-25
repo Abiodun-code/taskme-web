@@ -27,17 +27,43 @@ const Home = () => {
   useEffect(() => {
     if (!user) return;
 
-    const q = query(collection(db, "tasks"), where("userId", "==", user.uid))
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const tasksData = snapshot.docs.map(doc => ({
+    const createdQuery = query(collection(db, "tasks"), where("userId", "==", user.uid));
+    const assignedQuery = query(collection(db, "tasks"), where("assignedTo", "array-contains", user.uid));
+
+    const unsubCreated = onSnapshot(createdQuery, (snapshot) => {
+      const createdTasks = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-      })) as Task[]
-      setTasks(tasksData)
-    })
+      })) as Task[];
 
-    return () => unsubscribe()
-  }, [user])
+      // Combine later if assignedQuery already fired
+      setTasks(prev => {
+        const existingAssigned = prev.filter(t => !createdTasks.find(c => c.id === t.id));
+        return [...createdTasks, ...existingAssigned];
+      });
+    });
+
+    const unsubAssigned = onSnapshot(assignedQuery, (snapshot) => {
+      const assignedTasks = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Task[];
+
+      // Combine later if createdQuery already fired
+      setTasks(prev => {
+        const existingCreated = prev.filter(t => !assignedTasks.find(a => a.id === t.id));
+        return [...assignedTasks, ...existingCreated];
+      });
+    });
+
+    return () => {
+      unsubCreated();
+      unsubAssigned();
+    };
+  }, [user]);
+
+
+
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event

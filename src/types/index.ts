@@ -19,4 +19,5 @@ export type Task = {
   description: string;
   status: "TODO" | "IN_PROGRESS" | "DONE";
   userId: string;
+  assignedTo: string[]; // Array of user IDs
 }
