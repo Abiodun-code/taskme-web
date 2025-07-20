@@ -1,6 +1,29 @@
 import React from "react"
 
-const CustomModal = ({ isOpen, onClose , children}: { isOpen: boolean, onClose: () => void, children:React.ReactNode }) => {
+type CustomModalProps = {
+  isOpen: boolean
+  onClose: () => void
+  children: React.ReactNode
+  widthClass?: string
+  className?: string
+  position?: 'center' | 'left' | 'right' | 'bottom'
+}
+
+const positionClasses: Record<NonNullable<CustomModalProps['position']>, string> = {
+  center: "items-center justify-center",
+  left: "items-center justify-start",
+  right: "items-center justify-end",
+  bottom: "items-end justify-center",
+}
+
+const CustomModal = ({
+  isOpen,
+  onClose,
+  children,
+  widthClass = "w-full h-auto max-w-sm lg:max-w-2xl xl:max-w-2xl",
+  className = "",
+  position = "center"
+}: CustomModalProps) => {
   if (!isOpen) return null
 
   const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -12,9 +35,11 @@ const CustomModal = ({ isOpen, onClose , children}: { isOpen: boolean, onClose: 
   return (
     <div
       onClick={handleClickOutside}
-      className="fixed inset-0 z-40 max-w-screen bg-black bg-opacity-50 flex items-center justify-center"
+      className={`fixed inset-0 z-40 bg-black/30 flex ${positionClasses[position]} ${className}`}
     >
-      <div className="bg-white rounded-lg px-6 w-full lg:max-w-2xl max-w-sm xl:max-w-2xl h-auto overflow-y-scroll max-h-[70vh] shadow-md">
+      <div
+        className={`bg-white rounded-lg h-auto  shadow-md ${widthClass}`}
+      >
         {children}
       </div>
     </div>
