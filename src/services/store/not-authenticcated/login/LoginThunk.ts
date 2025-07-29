@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { signInWithEmailAndPassword, reload } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../../firebase";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { clearAuth, setAuth } from "./LoginSlice";
 
 export const loginUser = createAsyncThunk(
@@ -14,34 +14,24 @@ export const loginUser = createAsyncThunk(
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Reload user to get the most up-to-date emailVerified status
-      await reload(user);
+      // Make sure we have a user
+      if (!user || !user.uid) throw new Error("Authentication failed");
 
+      // Access user's Firestore document
       const userRef = doc(db, "users", user.uid);
       const userSnap = await getDoc(userRef);
 
       if (!userSnap.exists()) {
-        throw new Error("User does not exist in Firestore");
+        throw new Error("User profile not found in Firestore");
       }
 
       const userData = userSnap.data();
 
-      // If email is verified but isVerify in Firestore is still false, update it
-      if (user.emailVerified && !userData.isVerify) {
-        await updateDoc(userRef, {
-          isVerify: true,
-        });
-        userData.isVerify = true; // Update the local copy
-      }
-
-      // Prevent login if still not verified
-      if (!userData.isVerify) {
-        throw new Error("Please verify your email before logging in.");
-      }
-
+      // Get token
       const accessToken = await user.getIdToken();
       localStorage.setItem("accessToken", accessToken);
 
+      // Save to Redux
       dispatch(setAuth({ accessToken }));
 
       return {
@@ -52,12 +42,17 @@ export const loginUser = createAsyncThunk(
           ...userData,
         },
       };
-
-    } catch (error) {
-      return rejectWithValue(error);
+    } catch (error: any) {
+      console.error("Login error:", error.message || error);
+      return rejectWithValue({
+        code: error.code || "auth/unknown-error",
+        message: error.message || "An unknown error occurred.",
+      });
     }
   }
 );
+
+
 
 export const logoutUser = createAsyncThunk("auth/logout", async (_, { dispatch }) => {
   try {
