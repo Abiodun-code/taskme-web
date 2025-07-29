@@ -38,7 +38,7 @@ const CustomModal = ({
       className={`fixed inset-0 z-40 bg-black/30 flex ${positionClasses[position]} p-2`}
     >
       <div
-        className={`bg-white rounded-lg shadow-md overflow-y-auto max-h-[95vh] ${widthClass} ${className}`}
+        className={`bg-white rounded-lg shadow-md overflow-y-auto max-h-[95vh] p-4 ${widthClass} ${className}`}
       >
         {children}
       </div>
